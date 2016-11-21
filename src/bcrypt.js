@@ -325,3 +325,17 @@ bcrypt.encodeBase64 = base64_encode;
  * @expose
  */
 bcrypt.decodeBase64 = base64_decode;
+
+/**
+ * Crypts an array of bytes.
+ * @function
+ * @param {Array.<number>} b Bytes to crypt
+ * @param {Array.<number>} salt Salt bytes to use
+ * @param {number} rounds Number of rounds
+ * @param {function(Error, Array.<number>=)=} callback Callback receiving the error, if any, and the resulting bytes. If
+ *  omitted, the operation will be performed synchronously.
+ *  @param {function(number)=} progressCallback Callback called with the current progress
+ * @returns {!Array.<number>|undefined} Resulting bytes if callback has been omitted, otherwise `undefined`
+ * @expose
+ */
+bcrypt.crypt = crypt;

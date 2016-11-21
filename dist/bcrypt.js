@@ -662,7 +662,7 @@
         utfx.calculateUTF8 = function(src) {
             var cp, l=0;
             while ((cp = src()) !== null)
-                l += utfx.calculateCodePoint(cp);
+                l += (cp < 0x80) ? 1 : (cp < 0x800) ? 2 : (cp < 0x10000) ? 3 : 4;
             return l;
         };
 
@@ -675,7 +675,7 @@
         utfx.calculateUTF16asUTF8 = function(src) {
             var n=0, l=0;
             utfx.UTF16toUTF8(src, function(cp) {
-                ++n; l += utfx.calculateCodePoint(cp);
+                ++n; l += (cp < 0x80) ? 1 : (cp < 0x800) ? 2 : (cp < 0x10000) ? 3 : 4;
             });
             return [n,l];
         };
@@ -1071,7 +1071,7 @@
      * @returns {!Array.<number>|undefined} Resulting bytes if callback has been omitted, otherwise `undefined`
      * @inner
      */
-    function _crypt(b, salt, rounds, callback, progressCallback) {
+    function crypt(b, salt, rounds, callback, progressCallback) {
         var cdata = C_ORIG.slice(),
             clen = cdata.length,
             err;
@@ -1239,11 +1239,11 @@
 
         // Sync
         if (typeof callback == 'undefined')
-            return finish(_crypt(passwordb, saltb, rounds));
+            return finish(crypt(passwordb, saltb, rounds));
 
         // Async
         else {
-            _crypt(passwordb, saltb, rounds, function(err, bytes) {
+            crypt(passwordb, saltb, rounds, function(err, bytes) {
                 if (err)
                     callback(err, null);
                 else
@@ -1271,6 +1271,20 @@
      * @expose
      */
     bcrypt.decodeBase64 = base64_decode;
+
+    /**
+     * Crypts an array of bytes.
+     * @function
+     * @param {Array.<number>} b Bytes to crypt
+     * @param {Array.<number>} salt Salt bytes to use
+     * @param {number} rounds Number of rounds
+     * @param {function(Error, Array.<number>=)=} callback Callback receiving the error, if any, and the resulting bytes. If
+     *  omitted, the operation will be performed synchronously.
+     *  @param {function(number)=} progressCallback Callback called with the current progress
+     * @returns {!Array.<number>|undefined} Resulting bytes if callback has been omitted, otherwise `undefined`
+     * @expose
+     */
+    bcrypt.crypt = crypt;
 
     return bcrypt;
 }));

@@ -384,7 +384,7 @@ function _ekskey(data, key, P, S) {
  * @returns {!Array.<number>|undefined} Resulting bytes if callback has been omitted, otherwise `undefined`
  * @inner
  */
-function _crypt(b, salt, rounds, callback, progressCallback) {
+function crypt(b, salt, rounds, callback, progressCallback) {
     var cdata = C_ORIG.slice(),
         clen = cdata.length,
         err;
@@ -552,11 +552,11 @@ function _hash(s, salt, callback, progressCallback) {
 
     // Sync
     if (typeof callback == 'undefined')
-        return finish(_crypt(passwordb, saltb, rounds));
+        return finish(crypt(passwordb, saltb, rounds));
 
     // Async
     else {
-        _crypt(passwordb, saltb, rounds, function(err, bytes) {
+        crypt(passwordb, saltb, rounds, function(err, bytes) {
             if (err)
                 callback(err, null);
             else

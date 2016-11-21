@@ -105,3 +105,14 @@ bcrypt.encodeBase64 = function(b, len) {};
  * @expose
  */
 bcrypt.decodeBase64 = function(s, len) {};
+
+/**
+ * @param {Array.<number>} b
+ * @param {Array.<number>} salt
+ * @param {number} rounds
+ * @param {function(Error, Array.<number>=)=} callback
+ * @param {function(number)=} progressCallback
+ * @returns {!Array.<number>|undefined}
+ * @expose
+ */
+bcrypt.crypt = function(b, salt, rounds, callback, progressCallback) {};
