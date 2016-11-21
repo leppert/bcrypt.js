@@ -89,3 +89,19 @@ bcrypt.getRounds = function(hash) {};
  * @expose
  */
 bcrypt.getSalt = function(hash) {};
+
+/**
+ * @param {!Array.<number>} b
+ * @param {number} len
+ * @returns {string}
+ * @expose
+ */
+bcrypt.encodeBase64 = function(b, len) {};
+
+/**
+ * @param {string} s
+ * @param {number} len
+ * @returns {!Array.<number>}
+ * @expose
+ */
+bcrypt.decodeBase64 = function(s, len) {};
